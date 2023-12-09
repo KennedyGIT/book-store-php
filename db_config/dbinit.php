@@ -9,12 +9,11 @@ try {
 
     // Create the database if it doesn't exist
     $conn->exec("CREATE DATABASE IF NOT EXISTS BookDB");
-    echo "Database created successfully<br>";
 
     // Select the created database
     $conn->exec("USE BookDB");
 
-    // Create the Users table
+    // Create the Users table if it doesn't exist
     $conn->exec("CREATE TABLE IF NOT EXISTS Users (
         UserId INT AUTO_INCREMENT PRIMARY KEY,
         UserType VARCHAR(20),
@@ -24,47 +23,40 @@ try {
         HashedPassword VARCHAR(255)
     )");
 
-    // Insert sample data for Users
-    $conn->exec("INSERT INTO Users (UserType, Username, Firstname, Lastname, HashedPassword)
-        VALUES 
-            ('Admin', 'admin_user', 'Admin', 'Smith', 'hashed_admin_password'),
-            ('Regular', 'john_doe', 'John', 'Doe', 'hashed_regular_password'),
-            ('Regular', 'jane_smith', 'Jane', 'Smith', 'hashed_regular_password')");
+    // Check if the admin user exists
+    $stmt = $conn->prepare("SELECT COUNT(*) AS count FROM Users WHERE UserType = 'Admin'");
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // Create the Authors table
+    if ($result['count'] == 0) {
+        // Insert sample data for Admin user
+        $conn->exec("INSERT INTO Users (UserType, Username, Firstname, Lastname, HashedPassword)
+            VALUES ('Admin', 'admin_user', 'Admin', 'Smith', '$2y$10$F7j0/GLO9uGVTe1Vp3D9B.icl4eXo96rTI5qoy6E0JjOJiPw38UFS')");
+    }
+
+    // Create the Authors table if it doesn't exist
     $conn->exec("CREATE TABLE IF NOT EXISTS Authors (
         AuthorId INT AUTO_INCREMENT PRIMARY KEY,
         FirstName VARCHAR(50),
         LastName VARCHAR(50)
     )");
 
-    // Insert sample data for Authors
-    $conn->exec("INSERT INTO Authors (FirstName, LastName)
-        VALUES 
-            ('George', 'Martin'),
-            ('Isaac', 'Asimov'),
-            ('Agatha', 'Christie')");
 
-    // Create the Books table
+    // Create the Books table if it doesn't exist
     $conn->exec("CREATE TABLE IF NOT EXISTS Books (
         BookId INT AUTO_INCREMENT PRIMARY KEY,
         BookTitle VARCHAR(100),
         AuthorId INT,
         Genre VARCHAR(50),
         AmountInStock INT,
+        Price Decimal,
         BookImagePath VARCHAR(255),
         FOREIGN KEY (AuthorId) REFERENCES Authors(AuthorId)
     )");
 
-    // Insert sample data for Books
-    $conn->exec("INSERT INTO Books (BookTitle, AuthorId, Genre, AmountInStock, BookImagePath)
-        VALUES 
-            ('Book 1 Title', 1, 'Fantasy', 10, '/images/book1.jpg'),
-            ('Book 2 Title', 2, 'Science Fiction', 15, '/images/book2.jpg'),
-            ('Book 3 Title', 3, 'Mystery', 8, '/images/book3.jpg')");
 
-    echo "Tables created successfully and sample data inserted";
 } catch(PDOException $e) {
     echo "Connection failed: " . $e->getMessage();
 }
+
 ?>
