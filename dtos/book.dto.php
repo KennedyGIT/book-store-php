@@ -2,18 +2,20 @@
 class Book {
     public $BookId;
     public $BookTitle;
-    public $AuthorId;
+    public $Author;
     public $Genre;
     public $AmountInStock;
     public $BookImagePath;
+    public $Price;
 
-    public function __construct($BookId, $BookTitle, $AuthorId, $Genre, $AmountInStock, $BookImagePath) {
+    public function __construct($BookId, $BookTitle, $Author, $Genre, $AmountInStock, $BookImagePath, $Price) {
         $this->BookId = $BookId;
         $this->BookTitle = $BookTitle;
-        $this->AuthorId = $AuthorId;
+        $this->Author = $Author;
         $this->Genre = $Genre;
         $this->AmountInStock = $AmountInStock;
         $this->BookImagePath = $BookImagePath;
+        $this->Price = $Price;
     }
 }
 ?>

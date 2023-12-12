@@ -183,4 +183,6 @@
     <script src="../assets/js/theme-setting.js"></script>
 </body>
 
+
+<!-- Mirrored from themes.pixelstrap.com/fastkart/front-end/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 09 Dec 2023 02:01:07 GMT -->
 </html>
